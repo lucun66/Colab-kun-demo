@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshibi Co-creation Design | Open Campus</title>
+    <style>
+        :root {
+            --primary-yellow: #FFE600;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #F2F2F2;
+            --bg-color: #FAFAFA;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--black);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Header 导航栏 --- */
+        header {
+            background-color: var(--primary-yellow);
+            border-bottom: 5px solid var(--black);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            gap: 10px;
+            height: auto;
+            min-height: 60px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .logo-text {
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            background: var(--black);
+            color: var(--primary-yellow);
+            padding: 5px 12px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .logo-image {
+            height: 45px;
+            width: auto;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-image img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-width: 0;
+            overflow-x: auto;
+            padding: 8px 5px; /* Add vertical padding to prevent clipping of shadows */
+            -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .nav-center::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome/Safari */
+        }
+
+        .header-right {
+            font-weight: bold;
+            font-size: 1rem;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            header {
+                min-height: 55px;
+                padding: 8px 12px;
+            }
+            .logo-image {
+                height: 40px;
+            }
+            .toggle-btn {
+                padding: 8px 18px;
+                font-size: 1rem;
+                min-height: 50px;
+            }
+            .toggle-btn-jp {
+                font-size: 0.8rem;
+            }
+            .header-right {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            header {
+                min-height: 50px;
+                padding: 6px 10px;
+            }
+            .logo-image {
+                height: 35px;
+            }
+            .toggle-btn {
+                padding: 6px 14px;
+                font-size: 0.9rem;
+                min-height: 46px;
+                box-shadow: 2px 2px 0px var(--black);
+            }
+            .toggle-btn:hover {
+                box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
+            }
+            .toggle-btn-jp {
+                font-size: 0.7rem;
+            }
+            .header-right {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                min-height: 45px;
+                padding: 6px 8px;
+            }
+            .logo-image {
+                height: 32px;
+            }
+            .toggle-btn {
+                padding: 5px 12px;
+                font-size: 0.8rem;
+                min-height: 42px;
+                box-shadow: 2px 2px 0px var(--black);
+            }
+            .toggle-btn-jp {
+                display: none;
+            }
+            .header-right {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-toggle {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+            .nav-center {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-yellow);
+                border-bottom: 5px solid var(--black);
+                flex-direction: column;
+                gap: 6px;
+                padding: 10px;
+                display: flex;
+                z-index: 19;
+            }
+            .nav-center.collapsed {
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                pointer-events: none;
+            }
+            header {
+                flex-wrap: wrap;
+                min-height: auto;
+                position: relative;
+            }
+            .logo-image {
+                height: 30px;
+            }
+            .toggle-btn {
+                padding: 6px 10px;
+                font-size: 0.85rem;
+                min-height: 38px;
+                width: 100%;
+                justify-content: center;
+            }
+            .header-right {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 4px 6px;
+            }
+            .logo-image {
+                height: 28px;
+            }
+            .toggle-btn {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+                min-height: 34px;
+                border: 3px solid var(--black);
+                box-shadow: 1px 1px 0px var(--black);
+            }
+            .nav-toggle {
+                padding: 4px 8px;
+                font-size: 1.2rem;
+                border: 3px solid var(--black);
+                box-shadow: 1px 1px 0px var(--black);
+            }
+        }
+
+        /* 视图切换按钮 */
+        .toggle-btn {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 30px;
+            padding: 10px 24px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px var(--black);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            line-height: 1;
+            height: fit-content;
+            min-height: 55px;
+        }
+
+        .toggle-btn-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .text-wide {
+            display: block;
+            white-space: nowrap;
+        }
+
+        .text-narrow {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .toggle-btn-jp {
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.85;
+        }
+
+        @media (max-width: 1300px) {
+            .text-wide {
+                display: none;
+            }
+            .text-narrow {
+                display: flex;
+            }
+        }
+
+        .toggle-btn:hover {
+            background: var(--black);
+            color: var(--primary-yellow);
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        .toggle-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0px 0px 0px var(--black);
+        }
+
+        .toggle-btn.active {
+            background: var(--black);
+            color: var(--primary-yellow);
+            box-shadow: 3px 3px 0px var(--black);
+        }
+
+        /* 导航栏折叠按钮 */
+        .nav-toggle {
+            display: none;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 2px 2px 0px var(--black);
+        }
+
+        .nav-toggle:hover {
+            background: var(--black);
+            color: var(--primary-yellow);
+        }
+
+        /* --- 主视图容器 --- */
+        .view-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* === 视图 1：互动机器人区 === */
+        #bot-view {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            gap: 60px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* 吉祥物区域 */
+        .mascot-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 320px;
+            position: relative;
+        }
+
+        /* 统一动感悬停效果：对话框类 */
+        .hover-bounce {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .hover-bounce:hover {
+            transform: scale(1.03) translateY(-5px) !important;
+            box-shadow: 8px 8px 0px var(--black);
+            background-color: var(--primary-yellow);
+            cursor: default;
+        }
+
+        /* 机器人主气泡 */
+        .answer-bubble {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 30px 30px 30px 5px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            box-shadow: 6px 6px 0px var(--black);
+            position: relative;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+        }
+
+        .answer-bubble.show {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .answer-bubble::after {
+            content: ''; position: absolute; bottom: -20px; left: 40px;
+            border-width: 20px 20px 0 0; border-style: solid;
+            border-color: var(--black) transparent transparent transparent;
+        }
+
+        /* 完整机器人图片样式 */
+        .robot-image {
+            width: 280px; /* 您可以根据需要调整整体图片大小 */
+            height: auto;
+            z-index: 2;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* 右侧选项 */
+        .options-container {
+            display: flex; flex-direction: column; gap: 20px; max-width: 500px;
+            justify-content: center;
+        }
+        .option-bubble {
+            background: var(--white); border: 3px solid var(--black); border-radius: 40px;
+            padding: 15px 25px; cursor: pointer; font-weight: bold; font-size: 1rem;
+            width: fit-content; max-width: 100%; position: relative;
+            box-shadow: 5px 5px 0px var(--black);
+            opacity: 0; transform: translateX(30px);
+        }
+        .option-bubble.show { opacity: 1; transform: translateX(0); }
+        .option-bubble::before {
+            content: ''; position: absolute; left: -15px; top: 50%; transform: translateY(-50%);
+            border-width: 10px 15px 10px 0; border-style: solid; border-color: transparent var(--black) transparent transparent;
+        }
+
+        /* 底部输入框 */
+        .chat-input-area {
+            background: var(--white); border-top: 5px solid var(--black); padding: 20px 40px;
+            display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 10;
+        }
+        .chat-input-area input {
+            width: 500px; max-width: 60%; padding: 15px 20px; border: 4px solid var(--black); border-radius: 30px;
+            font-size: 1rem; font-weight: bold; outline: none; transition: all 0.3s;
+        }
+        .chat-input-area input:focus { border-color: var(--primary-yellow); box-shadow: inset 4px 4px 0px var(--gray); }
+        .chat-input-area button {
+            padding: 12px 30px; background: var(--primary-yellow); border: 4px solid var(--black); border-radius: 30px;
+            font-weight: 900; cursor: pointer; box-shadow: 5px 5px 0px var(--black); transition: all 0.1s;
+        }
+        .chat-input-area button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--black); }
+
+
+        /* === 视图 2：前辈寄语区 === */
+        #messages-view {
+            display: none; 
+            flex-direction: column;
+            padding: 40px 60px;
+            overflow-y: auto;
+            height: 100%;
+            background: var(--bg-color);
+            gap: 50px;
+        }
+
+        #messages-view::-webkit-scrollbar { width: 8px; }
+        #messages-view::-webkit-scrollbar-thumb { background: var(--black); border-radius: 10px; }
+
+        .message-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .message-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 140px;
+            flex-shrink: 0;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            background-color: var(--white);
+            border: 5px solid var(--black);
+            border-radius: 50%;
+            box-shadow: 4px 4px 0px var(--black);
+            object-fit: contain;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="40" r="20" fill="%23ccc"/><path d="M20 90 Q50 60 80 90" stroke="%23ccc" stroke-width="15" fill="none"/></svg>');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 80%;
+        }
+
+        .profile-info {
+            background: var(--black);
+            color: var(--primary-yellow);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .profile-info span { font-size: 0.75rem; color: var(--white); display: block; margin-top: 2px;}
+
+        .msg-bubble {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 30px;
+            padding: 25px 35px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 6px 6px 0px var(--black);
+            position: relative;
+            flex: 1;
+        }
+
+        .msg-bubble.left-tail::before {
+            content: ''; position: absolute; left: -22px; top: 50%; transform: translateY(-50%);
+            border-width: 15px 24px 15px 0; border-style: solid; border-color: transparent var(--black) transparent transparent;
+        }
+        .msg-bubble.right-tail::after {
+            content: ''; position: absolute; right: -22px; top: 50%; transform: translateY(-50%);
+            border-width: 15px 0 15px 24px; border-style: solid; border-color: transparent transparent transparent var(--black);
+        }
+
+        /* === 视图 3：学生入试合格作品区 === */
+        #portfolio-view {
+            display: none;
+            flex-direction: column;
+            padding: 20px 60px 40px;
+            overflow-y: auto;
+            height: 100%;
+            background: var(--bg-color);
+        }
+
+        #portfolio-view::-webkit-scrollbar { width: 8px; }
+        #portfolio-view::-webkit-scrollbar-thumb { background: var(--black); border-radius: 10px; }
+
+        .portfolio-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 2.2rem;
+            margin-top: 10px;
+            margin-bottom: 40px;
+            background: var(--black);
+            color: var(--primary-yellow);
+            padding: 20px 30px;
+            border-radius: 20px;
+            display: inline-block;
+            align-self: center;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            animation: fadeIn 0.5s ease-out forwards;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            justify-content: center;
+        }
+
+        .portfolio-card {
+            background: var(--white);
+            border: 5px solid var(--black);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 6px 6px 0px var(--black);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portfolio-card:hover {
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 10px 10px 0px var(--black);
+            background-color: var(--primary-yellow);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 250px;
+            background: var(--gray);
+            border-bottom: 4px solid var(--black);
+            object-fit: cover;
+            display: block;
+        }
+
+        .portfolio-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .portfolio-name {
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-year {
+            font-size: 0.9rem;
+            color: var(--black);
+            margin-bottom: 8px;
+            background: var(--gray);
+            padding: 5px 12px;
+            border-radius: 15px;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .portfolio-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--black);
+        }
+
+        /* 动画 */
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--rot)); } 50% { transform: translateY(-8px) rotate(var(--rot)); } }
+        .floating { animation: float 4s ease-in-out infinite; }
+        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px) scale(1.02); } }
+        .robot-jump { animation: jump 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-image">
+        <img src="colab_logo_202509.svg" alt="Co-Lab Logo">
+    </div>
+    <button class="nav-toggle" id="nav-toggle-btn" onclick="toggleNavMenu()">☰</button>
+    <div class="nav-center collapsed" id="nav-menu">
+        <button class="toggle-btn active" id="bot-btn" onclick="switchView('bot')">
+            <div class="toggle-btn-text">
+                <span class="text-wide">コラボくんと話す / Chat with Colab-kun</span>
+                <div class="text-narrow">
+                    <span>Chat</span>
+                    <span class="toggle-btn-jp">ロボット</span>
+                </div>
+            </div>
+        </button>
+        <button class="toggle-btn" id="messages-btn" onclick="switchView('messages')">
+            <div class="toggle-btn-text">
+                <span class="text-wide">先輩からのメッセージ / Messages</span>
+                <div class="text-narrow">
+                    <span>Messages</span>
+                    <span class="toggle-btn-jp">メッセージ</span>
+                </div>
+            </div>
+        </button>
+        <button class="toggle-btn" id="portfolio-btn" onclick="switchView('portfolio')">
+            <div class="toggle-btn-text">
+                <span class="text-wide">作品集 / Portfolio</span>
+                <div class="text-narrow">
+                    <span>Portfolio</span>
+                    <span class="toggle-btn-jp">作品集</span>
+                </div>
+            </div>
+        </button>
+    </div>
+    <div class="header-right">OPEN CAMPUS 2026</div>
+</header>
+
+<div class="view-container">
+    <div id="bot-view">
+        <div class="stage">
+            <div class="mascot-container">
+                <div class="answer-bubble hover-bounce" id="answer-bubble">
+                    “ Hello! 你好! こんにちは! ”
+                </div>
+                <!-- 移除了原来的 div，直接使用完整的图片作为机器人本体 -->
+                <img class="robot-image" id="robot-mascot" src="コラボ 眼睛1.png" alt="Mascot">
+            </div>
+            <div class="options-container" id="options-box"></div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="custom-input" placeholder="自由に質問を入力してね / Type your own question..." autocomplete="off"/>
+            <button id="send-btn" onclick="handleCustomInput()">SEND</button>
+        </div>
+    </div>
+
+    <div id="messages-view">
+        <div class="message-row">
+            <div class="profile">
+                <img class="profile-img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Student">
+                <div class="profile-info">佐藤 さん<span>3年生 (3rd Year)</span></div>
+            </div>
+            <div class="msg-bubble left-tail hover-bounce">
+                こんにちは！共創デザインでは、自分のアイデアを形にする楽しさが毎日味わえます。デッサン力よりも、「こんなものを創りたい！」というワクワクする気持ちが一番の武器になりますよ！キャンパスで待ってます！
+            </div>
+        </div>
+
+        <div class="message-row reverse" style="animation-delay: 0.1s;">
+            <div class="profile">
+                <img class="profile-img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Student">
+                <div class="profile-info">王 同学<span>2年生 (2nd Year)</span></div>
+            </div>
+            <div class="msg-bubble right-tail hover-bounce">
+                这里的学习氛围超级包容！留学生和日本学生常常混在一起做小组项目，虽然有时候会因为语言卡壳，但用设计和图画交流的时候，大家都心有灵犀。如果你喜欢跨界合作，这里绝对适合你！
+            </div>
+        </div>
+
+        <div class="message-row" style="animation-delay: 0.2s;">
+            <div class="profile">
+                <img class="profile-img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Student">
+                <div class="profile-info">Emily<span>4年生 (4th Year)</span></div>
+            </div>
+            <div class="msg-bubble left-tail hover-bounce">
+                The best part of Co-creation Design is the freedom. You are not limited to one medium. I combined coding with traditional fabric dyeing for my thesis! The professors here really encourage you to push boundaries.
+            </div>
+        </div>
+    </div>
+
+    <!-- 学生入试合格作品集视图 -->
+    <div id="portfolio-view">
+        <div class="portfolio-title">入試合格作品集 / Admission Portfolio</div>
+        <div class="portfolio-grid" id="portfolio-grid">
+            <!-- 示例作品卡片（JavaScript会动态填充） -->
+            <div class="portfolio-card">
+                <img class="portfolio-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Portfolio">
+                <div class="portfolio-info">
+                    <div class="portfolio-name">作品 1</div>
+                    <div class="portfolio-year">2024年入学</div>
+                    <div class="portfolio-description">このスペースに学生の入試合格作品を展示します。デザイン画、プロトタイプ、または他の創作物をアップロードしてください。</div>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <img class="portfolio-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Portfolio">
+                <div class="portfolio-info">
+                    <div class="portfolio-name">作品 2</div>
+                    <div class="portfolio-year">2024年入学</div>
+                    <div class="portfolio-description">優れた学生作品を紹介することで、これからの受験生に参考になるような作品を展示しています。</div>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <img class="portfolio-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Portfolio">
+                <div class="portfolio-info">
+                    <div class="portfolio-name">作品 3</div>
+                    <div class="portfolio-year">2024年入学</div>
+                    <div class="portfolio-description">多様なアプローチと創造的な思考が示されています。あなたのアイデアもここに展示される可能性があります！</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ================= 状态到完整图片的映射 ================= */
+    // 这里将原来的颜文字状态映射到您提供的完整身体图片上
+    const faceToImageMap = {
+        "( ╹▽╹ )": "コラボ 表情6.png", 
+        "(☆▽☆)": "コラボ 表情4.png", 
+        "p(*＾-＾*)q": "コラボ 眼睛1.png", 
+        "( ＾∀＾)": "コラボ 表情5.png", 
+        "(^o^)/": "コラボ 表情4.png", 
+        "(・_・;)": "コラボ 眼睛3.png", // 假设这张是空白脸或者闭眼
+        "( -_・)?": "コラボ 眼睛2.png", 
+        "( ´ ▽ ` )ﾉ": "コラボ 表情5.png", 
+        "Zzz... 🏠 ホームに戻ります / Returning home...": "コラボ 眼睛3.png"
+    };
+
+    /* ================= 导航栏折叠功能 ================= */
+    const navMenu = document.getElementById('nav-menu');
+    const navToggleBtn = document.getElementById('nav-toggle-btn');
+
+    function toggleNavMenu() {
+        navMenu.classList.toggle('collapsed');
+        navToggleBtn.style.background = navMenu.classList.contains('collapsed') ? 'var(--white)' : 'var(--white)';
+    }
+
+    // 当窗口大小改变时，如果宽度大于640px，取消折叠
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 640) {
+            navMenu.classList.remove('collapsed');
+        }
+    });
+
+    /* ================= 视图切换逻辑 ================= */
+    let currentView = 'bot';
+    const botView = document.getElementById('bot-view');
+    const messagesView = document.getElementById('messages-view');
+    const portfolioView = document.getElementById('portfolio-view');
+    const botBtn = document.getElementById('bot-btn');
+    const messagesBtn = document.getElementById('messages-btn');
+    const portfolioBtn = document.getElementById('portfolio-btn');
+
+    function switchView(view) {
+        currentView = view;
+        
+        // 隐藏所有视图
+        botView.style.display = 'none';
+        messagesView.style.display = 'none';
+        portfolioView.style.display = 'none';
+        
+        // 移除所有按钮的active类
+        botBtn.classList.remove('active');
+        messagesBtn.classList.remove('active');
+        portfolioBtn.classList.remove('active');
+        
+        // 显示对应视图并激活对应按钮
+        if (view === 'bot') {
+            botView.style.display = 'flex';
+            botBtn.classList.add('active');
+            resetInactivityTimer();
+        } else if (view === 'messages') {
+            messagesView.style.display = 'flex';
+            messagesBtn.classList.add('active');
+            clearTimeout(inactivityTimer);
+            clearInterval(idleInterval);
+        } else if (view === 'portfolio') {
+            portfolioView.style.display = 'flex';
+            portfolioBtn.classList.add('active');
+            clearTimeout(inactivityTimer);
+            clearInterval(idleInterval);
+        }
+        
+        // 在小屏幕时自动折叠菜单
+        if (window.innerWidth <= 640) {
+            navMenu.classList.add('collapsed');
+        }
+    }
+
+    /* ================= 机器人对话逻辑 ================= */
+    const dialogue = {
+        ja: {
+            greet: "「共創デザイン」へようこそ！気になることを選んでね。",
+            questions: [
+                { q: "どんなことを学ぶ学科なの？", a: "デザイン・アートの力と、ビジネスやテクノロジーを掛け合わせて社会を良くする方法を学ぶよ！", face: "(☆▽☆)" },
+                { q: "絵が苦手でも受験できる？", a: "もちろん！絵の上手さだけでなく、あなたの「考え方」や「ワクワク」を評価する入試があるよ。", face: "p(*＾-＾*)q" },
+                { q: "留学生は多い？", a: "国際色豊かなキャンパスだよ！いろんな国の友達と一緒にプロジェクトができるのが魅力なんだ。", face: "( ＾∀＾)" }
+            ],
+            back: "他の質問をする",
+            exit: "ありがとう、またね！"
+        },
+        zh: {
+            greet: "欢迎来到共创设计学科！想了解点什么呢？",
+            questions: [
+                { q: "共创设计具体是学什么的？", a: "我们将艺术设计与商业、科技结合，学习如何通过跨界合作来解决真实的社会问题！", face: "(☆▽☆)" },
+                { q: "画画零基础也可以考吗？", a: "完全可以！我们不仅看重绘画技巧，更看重你的“想法”和对改变世界的“热情”。", face: "p(*＾-＾*)q" },
+                { q: "这里留学生多吗？", a: "有很多哦！这是一个非常国际化的环境，你可以和不同文化背景的小伙伴一起做设计。", face: "( ＾∀＾)" }
+            ],
+            back: "还有其他问题",
+            exit: "谢谢，再见！"
+        },
+        en: {
+            greet: "Welcome to Co-creation Design! Pick a topic you're interested in.",
+            questions: [
+                { q: "What will I learn here?", a: "You'll learn to combine Art & Design with Business and Tech to create solutions for society!", face: "(☆▽☆)" },
+                { q: "Can I apply if I'm not good at drawing?", a: "Yes! We evaluate your 'ideas' and 'passion' just as much as your technical skills.", face: "p(*＾-＾*)q" },
+                { q: "Are there many international students?", a: "Yes! Our campus is very global. You'll work on projects with friends from all over the world.", face: "( ＾∀＾)" }
+            ],
+            back: "Ask another question",
+            exit: "Thanks! See you!"
+        },
+        ko: {
+            greet: "공동창작 디자인에 오신 것을 환영합니다! 궁금한 주제를 선택해 주세요.",
+            questions: [
+                { q: "어떤 것을 배우는 학과인가요?", a: "디자인·예술의 힘과 비즈니스, 기술을 결합하여 사회를 개선하는 방법을 배웁니다!", face: "(☆▽☆)" },
+                { q: "그림을 잘 못 그려도 지원할 수 있나요?", a: "물론이죠! 우리는 그리기 실력뿐만 아니라 여러분의 '생각'과 '열정'을 평가합니다.", face: "p(*＾-＾*)q" },
+                { q: "유학생이 많나요?", a: "캠퍼스는 국제적으로 매우 다양합니다! 다양한 문화 배경의 친구들과 함께 프로젝트를 할 수 있습니다.", face: "( ＾∀＾)" }
+            ],
+            back: "다른 질문",
+            exit: "감사합니다, 안녕!"
+        }
+    };
+
+    const genericAnswers = {
+        ja: ["いい質問だね！詳しくは展示ブースの先輩に聞いてみてね！", "なるほど！共創デザインではそういう好奇心も大事にしているよ！"],
+        zh: ["好问题！想知道更多的话，去问问展位上的前辈吧！", "原来如此！在共创设计，保持这种好奇心非常重要哦！"],
+        en: ["Great question! Ask our students at the booth for more details!", "Interesting! That kind of curiosity is perfect for Co-creation Design!"],
+        ko: ["좋은 질문입니다! 부스의 선배에게 더 많은 정보를 물어봐 보세요!", "그렇군요! 공동창작 디자인에서는 이런 호기심이 정말 중요합니다!"]
+    };
+
+    const answerBubble = document.getElementById('answer-bubble');
+    const optionsBox = document.getElementById('options-box');
+    const robot = document.getElementById('robot-mascot');
+    const customInput = document.getElementById('custom-input');
+
+    let currentLang = null;
+    let inactivityTimer = null;
+    let idleInterval = null;
+
+    function startIdleAnimation() {
+        clearInterval(idleInterval);
+        let state = 0;
+        const idleText = ["こんにちは！言語を選んでね！", "你好！请选择语言吧！", "Hi! Pick your language!"];
+        const idleFaces = ["( ╹▽╹ )", "( ´ ▽ ` )ﾉ", "(☆▽☆)"];
+        
+        idleInterval = setInterval(() => {
+            if (currentLang || currentView !== 'bot') return; 
+            state = (state + 1) % idleText.length;
+            answerBubble.style.opacity = 0;
+            setTimeout(() => {
+                answerBubble.innerText = idleText[state];
+                animateRobot(idleFaces[state]); 
+                answerBubble.style.opacity = 1;
+            }, 200);
+        }, 3500);
+    }
+
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        if (currentLang && currentView === 'bot') {
+            inactivityTimer = setTimeout(() => {
+                answerBubble.innerText = "Zzz... 🏠 ホームに戻ります / Returning home...";
+                animateRobot("( -_・)?"); 
+                setTimeout(init, 2000);
+            }, 45000);
+        }
+    }
+
+    ['mousemove', 'click', 'keypress', 'touchstart'].forEach(evt => document.addEventListener(evt, resetInactivityTimer));
+
+    function init() {
+        currentLang = null;
+        clearInterval(idleInterval);
+        clearTimeout(inactivityTimer);
+        customInput.value = '';
+
+        animateRobot("( ╹▽╹ )"); 
+        answerBubble.innerText = "こんにちは！言語を選んでね！";
+        
+        renderOptions([
+            { text: "🇯🇵 日本語", action: () => setLanguage('ja') },
+            { text: "🇨🇳 中文", action: () => setLanguage('zh') },
+            { text: "🇬🇧 English", action: () => setLanguage('en') },
+            { text: "🇰🇷 한국어", action: () => setLanguage('ko') }
+        ]);
+
+        setTimeout(() => answerBubble.classList.add('show'), 100);
+        startIdleAnimation();
+    }
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        clearInterval(idleInterval);
+        resetInactivityTimer();
+        
+        animateRobot("(^o^)"); 
+        answerBubble.classList.remove('show');
+        
+        setTimeout(() => {
+            answerBubble.innerText = dialogue[lang].greet;
+            answerBubble.classList.add('show');
+            const qs = dialogue[lang].questions.map(item => ({ text: item.q, action: () => showAnswer(item, lang) }));
+            renderOptions(qs);
+        }, 300);
+    }
+
+    function showAnswer(item, lang) {
+        resetInactivityTimer();
+        animateRobot(item.face); 
+        answerBubble.classList.remove('show');
+        
+        setTimeout(() => {
+            answerBubble.innerText = item.a;
+            answerBubble.classList.add('show');
+            renderOptions([
+                { text: dialogue[lang].back, action: () => setLanguage(lang) },
+                { text: dialogue[lang].exit, action: () => { answerBubble.innerText = "Bye Bye! ~"; setTimeout(init, 1000); } }
+            ]);
+        }, 300);
+    }
+
+    function handleCustomInput() {
+        const val = customInput.value.trim();
+        if (!val) return;
+        customInput.value = '';
+        resetInactivityTimer();
+        clearInterval(idleInterval);
+
+        animateRobot("(・_・;)"); 
+        answerBubble.classList.remove('show');
+        optionsBox.innerHTML = '';
+        
+        setTimeout(() => {
+            answerBubble.innerText = "Hmm...";
+            answerBubble.classList.add('show');
+            
+            setTimeout(() => {
+                const langToUse = currentLang || 'ja'; 
+                const answers = genericAnswers[langToUse];
+                answerBubble.innerText = answers[Math.floor(Math.random() * answers.length)];
+                animateRobot("( ＾∀＾)"); 
+                
+                renderOptions([{ 
+                    text: dialogue[langToUse] ? dialogue[langToUse].back : "戻る", 
+                    action: () => currentLang ? setLanguage(currentLang) : init() 
+                }]);
+                if(!currentLang) { currentLang = langToUse; resetInactivityTimer(); }
+            }, 1000);
+        }, 300);
+    }
+
+    customInput.addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); document.getElementById("send-btn").click(); } });
+
+    function renderOptions(items) {
+        const oldBubbles = optionsBox.querySelectorAll('.option-bubble');
+        oldBubbles.forEach(b => b.classList.remove('show'));
+
+        setTimeout(() => {
+            optionsBox.innerHTML = '';
+            items.forEach((item, index) => {
+                const b = document.createElement('div');
+                b.className = 'option-bubble floating hover-bounce';
+                b.innerText = item.text;
+                
+                const rot = (Math.random() * 8 - 4).toFixed(2) + 'deg';
+                b.style.setProperty('--rot', rot);
+                b.style.transform = `rotate(${rot})`;
+                
+                b.onclick = item.action;
+                optionsBox.appendChild(b);
+                setTimeout(() => b.classList.add('show'), index * 100);
+            });
+        }, oldBubbles.length > 0 ? 300 : 0);
+    }
+
+    // 更新整张图片的 src，并保留跳跃动画
+    function animateRobot(face) {
+        robot.classList.remove('robot-jump');
+        void robot.offsetWidth; 
+        robot.classList.add('robot-jump');
+
+        const faceImageUrl = faceToImageMap[face];
+        if (faceImageUrl) {
+            robot.src = faceImageUrl;
+        } else {
+            // 如果映射不到，给一个默认图片防崩
+            robot.src = "コラボ 眼睛1.png";
+        }
+    }
+
+    init();
+</script>
+
+</body>
+</html>
